@@ -31,7 +31,7 @@ let package = Package(
             dependencies: [.dependencies]),
         .testTarget(
             name: "FeaturesTests",
-            dependencies: ["Features", .tca, .contentBlockerService]),
+            dependencies: ["Features", .tca]),
 
     ])
 
