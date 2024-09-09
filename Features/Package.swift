@@ -11,6 +11,10 @@ let package = Package(
         .library(
             name: "Features",
             targets: ["Features"]),
+
+        .library(
+            name: "ContentBlockerService",
+            targets: ["ContentBlockerService"]),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.14.0"),
@@ -21,16 +25,23 @@ let package = Package(
         // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "Features",
-            dependencies: [.tca]
-        ),
+            dependencies: [.tca, .contentBlockerService]),
+        .target(
+            name: "ContentBlockerService",
+            dependencies: [.dependencies]),
         .testTarget(
             name: "FeaturesTests",
-            dependencies: ["Features", .tca]),
+            dependencies: ["Features", .tca, .contentBlockerService]),
+
     ])
 
+// First Party
+extension Target.Dependency {
+    static let contentBlockerService: Self = "ContentBlockerService"
+}
 
-// First party
-
+// Third Party
 extension Target.Dependency {
     static let tca = Self.product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+    static let dependencies = Self.product(name: "Dependencies", package: "swift-dependencies")
 }
