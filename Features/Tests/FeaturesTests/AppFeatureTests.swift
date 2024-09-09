@@ -25,7 +25,9 @@ final class AppFeatureTests: XCTestCase {
         
         await store.send(.scenePhaseBecomeActive)
         await store.receive(.checkUserEnableContentBlocker)
-        await store.receive(.userEnableContentBlocker(true))
+        await store.receive(.userEnableContentBlocker(true)) {
+            $0.isEnabledContentBlocker = true
+        }
         
     }
     
@@ -42,7 +44,9 @@ final class AppFeatureTests: XCTestCase {
         store.dependencies.contentBlockerService.checkUserEnableContenBloacker = { _ in true }
         await store.send(.scenePhaseBecomeActive)
         await store.receive(.checkUserEnableContentBlocker)
-        await store.receive(.userEnableContentBlocker(true))
+        await store.receive(.userEnableContentBlocker(true)) {
+            $0.isEnabledContentBlocker = true
+        }
         
     }
     

@@ -1,6 +1,6 @@
 import ComposableArchitecture
-import SwiftUI
 import ContentBlockerService
+import SwiftUI
 
 @main
 
@@ -16,7 +16,9 @@ struct BlahkuerApp: App {
 
 @Reducer
 struct AppFeature {
-    struct State: Equatable {}
+    struct State: Equatable {
+        var isEnabledContentBlocker = false
+    }
 
     enum Action: Equatable {
         case scenePhaseBecomeActive
@@ -25,12 +27,12 @@ struct AppFeature {
     }
 
     @Dependency(\.contentBlockerService) var contentBlockerService
-    
+
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .scenePhaseBecomeActive:
             return .send(.checkUserEnableContentBlocker)
-        
+
         case .checkUserEnableContentBlocker:
             return .run { send in
                 let extensionID = "com.elaborapp.Blahker.ContentBlocker"
@@ -38,8 +40,9 @@ struct AppFeature {
                 let isEnabled = await contentBlockerService.checkUserEnableContenBloacker(extensionID)
                 await send(.userEnableContentBlocker(isEnabled))
             }
-        
-        case .userEnableContentBlocker(let bool):
+
+        case let .userEnableContentBlocker(isEnabled):
+            state.isEnabledContentBlocker = isEnabled
             return .none
         }
     }
@@ -50,18 +53,23 @@ struct AppView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        Text("App View")
-            .onChange(of: scenePhase) { phase in
-                switch phase {
-                case .active:
-                    store.send(.scenePhaseBecomeActive)
+        WithViewStore(store, observe: { $0.isEnabledContentBlocker }) {
+            viewStore in
+            let isEnable = viewStore.state
 
-                case .background, .inactive:
-                    break
+            Text("blocker is \(isEnable ? "Enable" : "Disable")")
+                .onChange(of: scenePhase) { phase in
+                    switch phase {
+                    case .active:
+                        store.send(.scenePhaseBecomeActive)
 
-                @unknown default:
-                    break
+                    case .background, .inactive:
+                        break
+
+                    @unknown default:
+                        break
+                    }
                 }
-            }
+        }
     }
 }
