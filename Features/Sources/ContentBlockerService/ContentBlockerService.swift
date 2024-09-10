@@ -18,11 +18,7 @@ extension ContentBlockerService: DependencyKey {
         await withCheckedContinuation { continuation in
             SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: bundleID, completionHandler: {
                 state, error in
-                if let state {
-                    continuation.resume(returning: state.isEnabled)
-                } else {
-                    continuation.resume(returning: false)
-                }
+                continuation.resume(returning: state?.isEnabled ?? false)
                 if let error {
                     // log
                 }
