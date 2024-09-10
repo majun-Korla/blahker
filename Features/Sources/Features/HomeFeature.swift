@@ -16,29 +16,46 @@ struct HomeFeature {
 
     enum Action: Equatable {
         case scenePhaseBecomeActive
-        case checkUserEnableContentBlocker
         case userEnableContentBlocker(Bool)
+        
+        case tapRefreshButton
+        case tapAboutButton
+        case tapDontTapMeButton
     }
 
     @Dependency(\.contentBlockerService) var contentBlockerService
 
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         
+        var ch: Effect<Action> {
+            .run {
+            send in
+            let extensionID = "com.elaborapp.Blahker.ContentBlocker"
+            
+            let isEnabled = await contentBlockerService.checkUserEnableContenBloacker(extensionID)
+            await send(.userEnableContentBlocker(isEnabled))
+            }
+        }
+        
         switch action {
         case .scenePhaseBecomeActive:
-            return .send(.checkUserEnableContentBlocker)
+            return ch
 
-        case .checkUserEnableContentBlocker:
-            return .run { send in
-                let extensionID = "com.elaborapp.Blahker.ContentBlocker"
-
-                let isEnabled = await contentBlockerService.checkUserEnableContenBloacker(extensionID)
-                await send(.userEnableContentBlocker(isEnabled))
-            }
+     
 
         case let .userEnableContentBlocker(isEnabled):
             state.isEnabledContentBlocker = isEnabled
             return .none
+            
+        case .tapRefreshButton:
+            return ch
+            
+        case .tapAboutButton:
+            return .none
+            
+        case .tapDontTapMeButton:
+            return .none
+            
         }
     }
         

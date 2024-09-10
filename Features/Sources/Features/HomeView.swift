@@ -88,7 +88,9 @@ struct HomneView: View {
     @MainActor
     @ViewBuilder
     private var refreshButton: some View {
-        Button(action: {}, label: {
+        Button(action: {
+            store.send(.tapRefreshButton)
+        }, label: {
             Image(systemName: "arrow.clockwise")
         })
         .buttonStyle(.plain)
@@ -107,7 +109,7 @@ struct HomneView: View {
 #Preview {
     HomneView(store: Store(initialState: HomeFeature.State(), reducer: {
         HomeFeature()
-    })
+        })
     
     )
 }
