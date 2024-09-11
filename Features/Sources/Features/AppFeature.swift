@@ -16,6 +16,7 @@ struct BlahkuerApp: App {
 
 @Reducer
 struct AppFeature {
+    
     struct State: Equatable {
         var home: HomeFeature.State = .init()
         
@@ -31,13 +32,14 @@ struct AppFeature {
             HomeFeature()
         }
         Reduce(core)
+//            .ifLet(\.home, action: \.home)      //接待者模式?
         
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
         switch  action {
-        case let .home(.userEnableContentBlocker(isEnable)):
-            return .none
+//        case let .home(.userEnableContentBlocker(isEnable)):
+//            return .none
         case .home:
             return .none
         

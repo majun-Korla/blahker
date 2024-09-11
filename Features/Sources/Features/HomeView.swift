@@ -12,15 +12,16 @@ struct HomneView: View {
     @Environment(\.scenePhase) private var scenePhase
     let store: StoreOf<HomeFeature>
 
+//    @Perception.Bindable private var store = Store(initialState: HomeFeature.State()) {
+//       HomeFeature()
+//    }
+    
+    
     var body: some View {
-//        WithViewStore(store, observe: { $0.isEnabledContentBlocker }) {
-//            viewStore in
-//            let isEnable = viewStore.state
-//
-//            Text("blocker is \(isEnable ? "Enable" : "Disable")")
 
-//        }
         WithViewStore(store, observe: {$0.isEnabledContentBlocker})
+//        WithPerceptionTracking
+
         {
             viewStore in
             let isEnable = viewStore.state
@@ -58,7 +59,8 @@ struct HomneView: View {
                 
             }
             .preferredColorScheme(.dark)
-            
+//            .alert($store.scope(state: \.alert, action: \.alert))
+//            .alert(store: store.scope(state: \.alert, action: { $0 }))
         }
     }
 
@@ -83,6 +85,9 @@ struct HomneView: View {
         }
         .foregroundStyle(Color.white)
         .font(.title)
+//        .alert($store.scope(state: \.alert, action: \.alert))
+//        .alert($store.scope(state: \.alert, action: \.alert))
+        
     }
 
     @MainActor
@@ -106,10 +111,10 @@ struct HomneView: View {
     }
 }
 
-#Preview {
-    HomneView(store: Store(initialState: HomeFeature.State(), reducer: {
-        HomeFeature()
-        })
-    
-    )
-}
+//#Preview {
+//    HomneView(store: Store(initialState: HomeFeature.State(), reducer: {
+//        HomeFeature()
+//        })
+//    
+//    )
+//}
