@@ -59,6 +59,8 @@ struct HomneView: View {
                 
             }
             .preferredColorScheme(.dark)
+//            .alert(store: Store<PresentationState<AlertState<ButtonAction>>, PresentationAction<ButtonAction>>)
+            .alert(store: store.scope(state: \.$alert, action: \.alert))
 //            .alert($store.scope(state: \.alert, action: \.alert))
 //            .alert(store: store.scope(state: \.alert, action: { $0 }))
         }
@@ -80,7 +82,9 @@ struct HomneView: View {
     @MainActor
     @ViewBuilder
     private var dontTapMeButton: some View {
-        Button {} label: {
+        Button {
+            store.send(.tapDontTapMeButton)
+        } label: {
             Text("拜托别按我")
         }
         .foregroundStyle(Color.white)
@@ -104,7 +108,10 @@ struct HomneView: View {
     @MainActor
     @ViewBuilder
     private var aboutButton: some View {
-        Button(action: {}, label: {
+        Button(action: {
+            store.send(.tapAboutButton)
+
+        }, label: {
             Text("关于")
         })
         .buttonStyle(.plain)

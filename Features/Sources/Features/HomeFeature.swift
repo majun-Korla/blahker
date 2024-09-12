@@ -12,7 +12,7 @@ import SwiftUI
 struct HomeFeature {
     @ObservableState
     struct State: Equatable {
-        @Presents var alert: AlertState<Action>?
+        @Presents var alert: AlertState<Action.Alert>?
         var isEnabledContentBlocker = false
     }
 
@@ -73,22 +73,33 @@ struct HomeFeature {
             return .none
             
         case .tapAboutButton:
+           
+            return .none
+            
+        case .tapDontTapMeButton:
             state.alert = AlertState {
                 TextState("支持開發者")
             } actions: {
                 ButtonState(role: .cancel) {
-                    TextState("Cancel")
+                    TextState("取消")
                 }
-//                ButtonState(action: .smallDonation) {
-//                    TextState("打賞小小費")
-//                }
+                ButtonState(action: .smallDonation) {
+                    TextState("打賞小小費")
+                }
+                ButtonState(action: .mediumDonation) {
+                    TextState("打賞小費")
+                }
+                ButtonState(action: .largeDonation) {
+                    TextState("破費")
+                }
+                ButtonState(action: .rateStar) {
+                    TextState("我不出錢，給個五星評分總行了吧")
+                }
+                
+                
             } message: {
                 TextState("Blahker 的維護包含不斷更新擋廣告清單。如果有你的支持一定會更好～")
             }
-            return .none
-            
-        case .tapDontTapMeButton:
-       
             
             
             
