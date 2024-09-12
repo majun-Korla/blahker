@@ -46,4 +46,23 @@ final class HomeFeatureTests: XCTestCase {
         
     }
     
+    func testAlert_rate5Star_openAppstoreURL() async throws {
+//        let store = TestStore(initialState: HomeFeature.State(), reducer: { HomeFeature() })
+//        {
+//            $0.openURL = .init(handler: { url in
+//                XCTAssertEqual(url,
+//                               URL(string: "https://apps.apple.com/cn/app/blahker-%E5%B7%B4%E6%8B%89%E5%89%8B/id1482371114?mt=12")!
+//                )
+//                
+//                
+//            })
+//        }
+//        await store.send(.tapDontTapMeButton)
+//        
+//        await store.send(.alert(.presented(.rateStar))) {
+//            $0.alert = nil
+        }
+        
+    }
+    
 }

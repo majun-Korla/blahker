@@ -37,8 +37,14 @@ struct HomeFeature {
     }
 
     @Dependency(\.contentBlockerService) var contentBlockerService
+    @Dependency(\.openURL) var openURL
 
-    func reduce(into state: inout State, action: Action) -> Effect<Action> {
+    var body: some ReducerOf<Self> {
+        Reduce(core)
+            .ifLet(\.$alert, action: \.alert)
+    }
+    
+    func core(into state: inout State, action: Action) -> Effect<Action> {
         var ch: Effect<Action> {
             .run {
                 send in
@@ -119,7 +125,12 @@ struct HomeFeature {
                 return .none
                 
             case .rateStar:
-                return .none
+                return .run {
+                    send in
+                    let url = URL(string: "https://apps.apple.com/cn/app/blahker-%E5%B7%B4%E6%8B%89%E5%89%8B/id1482371114?mt=12")!
+                    await openURL(url)
+
+                }
                 
             case .okToReload:
                 return .none
