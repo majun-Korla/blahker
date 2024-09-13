@@ -47,7 +47,6 @@ extension ContentBlockerService: DependencyKey {
 
 extension ContentBlockerService: TestDependencyKey {
     public static var testValue = ContentBlockerService(
-        //'unimplemented(_:file:fileID:function:line:)' is deprecated: renamed to 'unimplemented(_:placeholder:)'
         checkUserEnableContenBlocker: unimplemented(_:"checkUserEnableContentBlocker", placeholder: false),
         reloadUserEnableContentBlocker: unimplemented("reloadUserEnableContentBlocker",placeholder:())
     )

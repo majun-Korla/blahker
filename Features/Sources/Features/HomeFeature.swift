@@ -45,21 +45,6 @@ struct HomeFeature {
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
-        
-        let pleaseEnableContentBlockerAlert = AlertState<HomeFeature.Action.Alert>(title: {
-                                                                   TextState("請開啟內容阻擋器")
-
-                                                               },
-                                                               actions: { ButtonState(role: .cancel) {
-                                                                   TextState("取消")
-                                                               }
-                                                               ButtonState(action: .okToReload) {
-                                                                   TextState("確定")
-                                                               }
-                                                               },
-                                                               message: { TextState("請打開「設定」 > 「Safari」 > 「內容阻擋器」，並啟用 Blahker") })
-        
-        
         var ch: Effect<Action> {
             .run {
                 send in
@@ -77,9 +62,9 @@ struct HomeFeature {
         case let .userEnableContentBlocker(isEnabled):
             state.isEnabledContentBlocker = isEnabled
             if isEnabled {
-                
+                state.alert = .updateSuccessAlert
             } else {
-                state.alert =  pleaseEnableContentBlockerAlert
+                state.alert = .pleaseEnableContentBlockerAlert
             }
             return .none
             
@@ -89,39 +74,12 @@ struct HomeFeature {
             
         case .tapAboutButton:
             
-           
             return .none
             
         case .tapDontTapMeButton:
-            state.alert = AlertState {
-                TextState("支持開發者")
-            } actions: {
-                ButtonState(role: .cancel) {
-                    TextState("取消")
-                }
-                ButtonState(action: .smallDonation) {
-                    TextState("打賞小小費")
-                }
-                ButtonState(action: .mediumDonation) {
-                    TextState("打賞小費")
-                }
-                ButtonState(action: .largeDonation) {
-                    TextState("破費")
-                }
-                ButtonState(action: .rateStar) {
-                    TextState("我不出錢，給個五星評分總行了吧")
-                }
-                
-                
-            } message: {
-                TextState("Blahker 的維護包含不斷更新擋廣告清單。如果有你的支持一定會更好～")
-            }
-            
-            
+            state.alert = .donateAlert
             
             return .none
-            
-
             
         case let .alert(.presented(action)):
             switch action {
@@ -136,15 +94,13 @@ struct HomeFeature {
                 
             case .rateStar:
                 return .run {
-                    send in
+                    _ in
                     let url = URL(string: "https://apps.apple.com/cn/app/blahker-%E5%B7%B4%E6%8B%89%E5%89%8B/id1482371114?mt=12")!
                     await openURL(url)
-
                 }
                 
             case .okToReload:
-                state.alert = pleaseEnableContentBlockerAlert
-                return .none
+                return ch
             }
             
         case .alert:
@@ -152,3 +108,6 @@ struct HomeFeature {
         }
     }
 }
+
+
+
