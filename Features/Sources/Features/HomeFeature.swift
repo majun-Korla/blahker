@@ -61,24 +61,33 @@ struct HomeFeature {
 
         case let .userEnableContentBlocker(isEnabled):
             state.isEnabledContentBlocker = isEnabled
-            return .none
-            
-        case .tapRefreshButton:
-            state.alert = AlertState {
-                TextState("Alert!")
-            } actions: {
-                ButtonState(role: .cancel) {
-                    TextState("Cancel")
+            if isEnabled {
+                
+            } else {
+                state.alert =  AlertState {
+                    TextState("請開啟內容阻擋器")
+                } actions: {
+                    ButtonState(role: .cancel) {
+                        TextState("取消")
+                    }
+                    ButtonState(action: .smallDonation) {
+                        TextState("確定")
+                    }
+                 
+                    
+                    
+                } message: {
+                    TextState("請打開「設定」 > 「Safari」 > 「內容阻擋器」，並啟用 Blahker")
                 }
-//                ButtonState(action: .okToReload) {
-//                    TextState("Increment")
-//                }
-            } message: {
-                TextState("This is an alert")
             }
             return .none
             
+        case .tapRefreshButton:
+            
+            return ch
+            
         case .tapAboutButton:
+            
            
             return .none
             
