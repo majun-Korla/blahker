@@ -11,13 +11,11 @@ import SafariServices
 
 public struct ContentBlockerService {
     public var checkUserEnableContenBlocker: (String) async -> Bool
-    public var reloadUserEnableContentBlocker: (String) async -> Void
+    public var reloadUserEnableContentBlocker: (String) async throws -> Void
 }
 
 extension ContentBlockerService: DependencyKey {
-//    public static var liveValue = ContentBlockerService { bundleID in
 
-//    }
     public static var liveValue = ContentBlockerService { bundleID in
         await withCheckedContinuation { continuation in
             SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: bundleID, completionHandler: {
@@ -29,24 +27,29 @@ extension ContentBlockerService: DependencyKey {
             })
         }
     } reloadUserEnableContentBlocker: { bundleID in
-        await withCheckedContinuation { coninuation in
-            SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: bundleID, completionHandler: {
-                state, error in
-                coninuation.resume()
+        try await withCheckedThrowingContinuation { continuation in
+            SFContentBlockerManager.reloadContentBlocker(withIdentifier: bundleID, completionHandler: {
+                 error in
+                
                 if let error {
-                    // log
-//                    coninuation.resume(throwing: error)
+                    continuation.resume(throwing: error)
+                }
+                else {
+                    continuation.resume()
                 }
             })
+            
         }
+        
     }
 
 }
 
 extension ContentBlockerService: TestDependencyKey {
     public static var testValue = ContentBlockerService(
-        checkUserEnableContenBlocker: unimplemented("checkUserEnableContentBlocker"),
-        reloadUserEnableContentBlocker: unimplemented("reloadUserEnableContentBlocker")
+        //'unimplemented(_:file:fileID:function:line:)' is deprecated: renamed to 'unimplemented(_:placeholder:)'
+        checkUserEnableContenBlocker: unimplemented(_:"checkUserEnableContentBlocker", placeholder: false),
+        reloadUserEnableContentBlocker: unimplemented("reloadUserEnableContentBlocker",placeholder:())
     )
 }
 

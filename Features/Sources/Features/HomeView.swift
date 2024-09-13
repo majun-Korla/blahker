@@ -118,10 +118,10 @@ struct HomneView: View {
     }
 }
 
-//#Preview {
-//    HomneView(store: Store(initialState: HomeFeature.State(), reducer: {
-//        HomeFeature()
-//        })
-//    
-//    )
-//}
+#Preview {
+    HomneView(store: Store(initialState: HomeFeature.State(), reducer: {
+        HomeFeature()
+        })
+    
+    )
+}

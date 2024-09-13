@@ -6,7 +6,7 @@
 //
 
 import ComposableArchitecture
-import SwiftUI
+import Foundation
 
 @Reducer
 struct HomeFeature {
