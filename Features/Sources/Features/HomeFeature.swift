@@ -45,6 +45,21 @@ struct HomeFeature {
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
+        
+        let pleaseEnableContentBlockerAlert = AlertState<HomeFeature.Action.Alert>(title: {
+                                                                   TextState("請開啟內容阻擋器")
+
+                                                               },
+                                                               actions: { ButtonState(role: .cancel) {
+                                                                   TextState("取消")
+                                                               }
+                                                               ButtonState(action: .okToReload) {
+                                                                   TextState("確定")
+                                                               }
+                                                               },
+                                                               message: { TextState("請打開「設定」 > 「Safari」 > 「內容阻擋器」，並啟用 Blahker") })
+        
+        
         var ch: Effect<Action> {
             .run {
                 send in
@@ -64,21 +79,7 @@ struct HomeFeature {
             if isEnabled {
                 
             } else {
-                state.alert =  AlertState {
-                    TextState("請開啟內容阻擋器")
-                } actions: {
-                    ButtonState(role: .cancel) {
-                        TextState("取消")
-                    }
-                    ButtonState(action: .smallDonation) {
-                        TextState("確定")
-                    }
-                 
-                    
-                    
-                } message: {
-                    TextState("請打開「設定」 > 「Safari」 > 「內容阻擋器」，並啟用 Blahker")
-                }
+                state.alert =  pleaseEnableContentBlockerAlert
             }
             return .none
             
@@ -142,6 +143,7 @@ struct HomeFeature {
                 }
                 
             case .okToReload:
+                state.alert = pleaseEnableContentBlockerAlert
                 return .none
             }
             

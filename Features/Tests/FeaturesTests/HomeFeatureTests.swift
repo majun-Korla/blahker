@@ -11,7 +11,7 @@ final class HomeFeatureTests: XCTestCase {
                                                             actions: { ButtonState(role: .cancel) {
                                                                 TextState("取消")
                                                             }
-                                                            ButtonState(action: .smallDonation) {
+                                                            ButtonState(action: .okToReload) {
                                                                 TextState("確定")
                                                             }
                                                             },
@@ -79,9 +79,13 @@ final class HomeFeatureTests: XCTestCase {
         await store.receive(.userEnableContentBlocker(false)) {
             $0.alert = Self.pleaseEnableContentBlockerAlert
         }
+        await store.send(.alert(.presented(.okToReload)))
     }
 
-    func testTapRefreshButton_userAlreadyEnableContentBlocker() async throws {}
+    func testTapRefreshButton_userAlreadyEnableContentBlocker() async throws {
+        
+        
+    }
     
     func testAlert_rate5Star_openAppstoreURL() async throws {
         let openURLExp = XCTestExpectation(description: "openURL")
