@@ -13,12 +13,14 @@ struct HomeFeature {
     @ObservableState
     struct State: Equatable {
         @Presents var alert: AlertState<Action.Alert>?
+        var isAppLaunch = false
         var isEnabledContentBlocker = false
     }
 
     enum Action: Equatable {
         case alert(PresentationAction<Alert>)
         
+        case appDidFinishLaunching
         case scenePhaseBecomeActive
         case userEnableContentBlocker(Bool)
         
@@ -33,6 +35,7 @@ struct HomeFeature {
             case rateStar
             
             case okToReload
+            
         }
     }
 
@@ -42,6 +45,7 @@ struct HomeFeature {
     var body: some ReducerOf<Self> {
         Reduce(core)
             .ifLet(\.$alert, action: \.alert)
+            ._printChanges()
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
@@ -52,20 +56,34 @@ struct HomeFeature {
             
                 let isEnabled = await contentBlockerService.checkUserEnableContenBlocker(extensionID)
                 await send(.userEnableContentBlocker(isEnabled))
+                
             }
+            .cancellable(id: CancleID.checkUserBlockerEnableCancleID, cancelInFlight: true)
+        }
+        
+        enum CancleID: Hashable {
+            case checkUserBlockerEnableCancleID
         }
         
         switch action {
+        case .appDidFinishLaunching:
+            state.isAppLaunch = true
+            return ch
         case .scenePhaseBecomeActive:
             return ch
 
         case let .userEnableContentBlocker(isEnabled):
-            state.isEnabledContentBlocker = isEnabled
-            if isEnabled {
-                state.alert = .updateSuccessAlert
-            } else {
+            switch (isEnabled, state.isAppLaunch, state.isEnabledContentBlocker) {
+            case (false, _, _):
                 state.alert = .pleaseEnableContentBlockerAlert
+ 
+            case (true, false, false):
+                state.alert = .updateSuccessAlert
+            case (true, _, _):
+                break
             }
+            state.isEnabledContentBlocker = isEnabled
+            state.isAppLaunch = false
             return .none
             
         case .tapRefreshButton:
@@ -83,6 +101,9 @@ struct HomeFeature {
             
         case let .alert(.presented(action)):
             switch action {
+           
+                
+                
             case .smallDonation:
                 return .none
                 
