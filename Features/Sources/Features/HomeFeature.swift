@@ -23,6 +23,7 @@ struct HomeFeature {
         case appDidFinishLaunching
         case scenePhaseBecomeActive
         case userEnableContentBlocker(Bool)
+        case manullyUserEnableContentBlocker(Bool)
         
         case tapRefreshButton
         case tapAboutButton
@@ -48,13 +49,13 @@ struct HomeFeature {
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
-        var ch: Effect<Action> {
+        func ch(manully: Bool) -> Effect<Action> {
             .run {
                 send in
                 let extensionID = "com.elaborapp.Blahker.ContentBlocker"
             
                 let isEnabled = await contentBlockerService.checkUserEnableContenBlocker(extensionID)
-                await send(.userEnableContentBlocker(isEnabled))
+                await send(manully ? .manullyUserEnableContentBlocker(isEnabled) : .userEnableContentBlocker(isEnabled))
             }
             .cancellable(id: CancleID.checkUserBlockerEnableCancleID, cancelInFlight: true)
         }
@@ -65,11 +66,19 @@ struct HomeFeature {
         
         switch action {
         case .appDidFinishLaunching:
-            return ch
+            return ch(manully: false)
 
         case .scenePhaseBecomeActive:
-            return ch
-
+            return ch(manully: false)
+        case let .manullyUserEnableContentBlocker(isEnabled):
+            if isEnabled {
+                state.alert = .updateSuccessAlert
+            } else {
+                state.alert = .pleaseEnableContentBlockerAlert
+            }
+            state.isEnabledContentBlocker = isEnabled
+            return .none
+            
         case let .userEnableContentBlocker(isEnabled):
             switch (isEnabled, state.isAppLaunch, state.isEnabledContentBlocker) {
             case (false, _, _):
@@ -87,7 +96,7 @@ struct HomeFeature {
             
         case .tapRefreshButton:
             
-            return ch
+            return ch(manully: true)
             
         case .tapAboutButton:
             
@@ -117,7 +126,7 @@ struct HomeFeature {
                 }
                 
             case .okToReload:
-                return ch
+                return ch(manully: true)
             }
             
         case .alert:

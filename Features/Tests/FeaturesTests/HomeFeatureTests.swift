@@ -70,13 +70,13 @@ final class HomeFeatureTests: XCTestCase {
         }
         
         await store.send(.tapRefreshButton)
-        await store.receive(.userEnableContentBlocker(false)) {
+        await store.receive(.manullyUserEnableContentBlocker(false)) {
             $0.alert = .pleaseEnableContentBlockerAlert
         }
         await store.send(.alert(.presented(.okToReload))) {
             $0.alert = nil
         }
-        await store.receive(.userEnableContentBlocker(false)) {
+        await store.receive(.manullyUserEnableContentBlocker(false)) {
             $0.alert = .pleaseEnableContentBlockerAlert
         }
         
@@ -85,7 +85,7 @@ final class HomeFeatureTests: XCTestCase {
         await store.send(.alert(.presented(.okToReload))) {
             $0.alert = nil
         }
-        await store.receive(.userEnableContentBlocker(true)) {
+        await store.receive(.manullyUserEnableContentBlocker(true)) {
             $0.isEnabledContentBlocker = true
             $0.alert = .updateSuccessAlert
         }
@@ -100,7 +100,7 @@ final class HomeFeatureTests: XCTestCase {
         }
         
         await store.send(.tapRefreshButton)
-        await store.receive(.userEnableContentBlocker(true)) {
+        await store.receive(.manullyUserEnableContentBlocker(true)) {
             $0.alert = .updateSuccessAlert
         }
     }
