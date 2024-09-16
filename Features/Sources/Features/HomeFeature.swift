@@ -13,7 +13,7 @@ struct HomeFeature {
     @ObservableState
     struct State: Equatable {
         @Presents var alert: AlertState<Action.Alert>?
-        var isAppLaunch = false
+        var isAppLaunch = true
         var isEnabledContentBlocker = false
     }
 
@@ -35,7 +35,6 @@ struct HomeFeature {
             case rateStar
             
             case okToReload
-            
         }
     }
 
@@ -45,7 +44,7 @@ struct HomeFeature {
     var body: some ReducerOf<Self> {
         Reduce(core)
             .ifLet(\.$alert, action: \.alert)
-            ._printChanges()
+//            ._printChanges()
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
@@ -56,7 +55,6 @@ struct HomeFeature {
             
                 let isEnabled = await contentBlockerService.checkUserEnableContenBlocker(extensionID)
                 await send(.userEnableContentBlocker(isEnabled))
-                
             }
             .cancellable(id: CancleID.checkUserBlockerEnableCancleID, cancelInFlight: true)
         }
@@ -69,6 +67,7 @@ struct HomeFeature {
         case .appDidFinishLaunching:
             state.isAppLaunch = true
             return ch
+
         case .scenePhaseBecomeActive:
             return ch
 
@@ -79,6 +78,7 @@ struct HomeFeature {
  
             case (true, false, false):
                 state.alert = .updateSuccessAlert
+
             case (true, _, _):
                 break
             }
@@ -101,9 +101,6 @@ struct HomeFeature {
             
         case let .alert(.presented(action)):
             switch action {
-           
-                
-                
             case .smallDonation:
                 return .none
                 
@@ -129,6 +126,3 @@ struct HomeFeature {
         }
     }
 }
-
-
-
