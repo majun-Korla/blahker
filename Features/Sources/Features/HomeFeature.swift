@@ -65,7 +65,6 @@ struct HomeFeature {
         
         switch action {
         case .appDidFinishLaunching:
-            state.isAppLaunch = true
             return ch
 
         case .scenePhaseBecomeActive:

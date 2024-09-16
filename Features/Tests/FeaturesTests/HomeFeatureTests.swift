@@ -91,6 +91,21 @@ final class HomeFeatureTests: XCTestCase {
         }
     }
 
+    func testTapRefreshButton_userAlreadyEnableContentBlocker() async throws {
+        var initialState = HomeFeature.State(isAppLaunch: false)
+        initialState.isEnabledContentBlocker = true
+        
+        let store = TestStore(initialState: initialState, reducer: { HomeFeature() }) {
+            $0.contentBlockerService.checkUserEnableContenBlocker = { _ in true }
+        }
+        
+        await store.send(.tapRefreshButton)
+        await store.receive(.userEnableContentBlocker(true)) {
+            $0.alert = .updateSuccessAlert
+        }
+    }
+
+    
     func testAlert_rate5Star_openAppstoreURL() async throws {
         let openURLExp = XCTestExpectation(description: "openURL")
         let store = TestStore(initialState: HomeFeature.State(), reducer: { HomeFeature() }) {
