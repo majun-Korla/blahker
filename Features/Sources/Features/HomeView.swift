@@ -12,22 +12,11 @@ struct HomneView: View {
     @Environment(\.scenePhase) private var scenePhase
     let store: StoreOf<HomeFeature>
 
-//    @Perception.Bindable private var store = Store(initialState: HomeFeature.State()) {
-//       HomeFeature()
-//    }
-    
-    
     var body: some View {
-
-        WithViewStore(store, observe: {$0.isEnabledContentBlocker})
-//        WithPerceptionTracking
-
-        {
+        WithViewStore(store, observe: { $0.isEnabledContentBlocker }) {
             viewStore in
             let isEnable = viewStore.state
-            
-            
-            NavigationStack {
+            NavigationStackStore(self.store.scope(state: \.path, action: \.path)) {
                 VStack {
                     descriptionView
                     Spacer()
@@ -56,13 +45,16 @@ struct HomneView: View {
                         break
                     }
                 }
-                
+            } destination: { store in
+                switch store.case {
+                case .about(let store):
+                    AboutView(store: store)
+                case .blockerList(let store):
+                    BlockerListView(store: store)
+                }
             }
             .preferredColorScheme(.dark)
-//            .alert(store: Store<PresentationState<AlertState<ButtonAction>>, PresentationAction<ButtonAction>>)
             .alert(store: store.scope(state: \.$alert, action: \.alert))
-//            .alert($store.scope(state: \.alert, action: \.alert))
-//            .alert(store: store.scope(state: \.alert, action: { $0 }))
         }
     }
 
@@ -89,9 +81,6 @@ struct HomneView: View {
         }
         .foregroundStyle(Color.white)
         .font(.title)
-//        .alert($store.scope(state: \.alert, action: \.alert))
-//        .alert($store.scope(state: \.alert, action: \.alert))
-        
     }
 
     @MainActor
@@ -121,7 +110,6 @@ struct HomneView: View {
 #Preview {
     HomneView(store: Store(initialState: HomeFeature.State(), reducer: {
         HomeFeature()
-        })
-    
+    })
     )
 }

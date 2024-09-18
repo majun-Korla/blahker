@@ -15,9 +15,12 @@ struct HomeFeature {
         @Presents var alert: AlertState<Action.Alert>?
         var isAppLaunch = true
         var isEnabledContentBlocker = false
+        
+        var path = StackState<Path.State>()
     }
 
     enum Action: Equatable {
+        case path(StackActionOf<Path>)
         case alert(PresentationAction<Alert>)
         
         case appDidFinishLaunching
@@ -45,6 +48,7 @@ struct HomeFeature {
     var body: some ReducerOf<Self> {
         Reduce(core)
             .ifLet(\.$alert, action: \.alert)
+            .forEach(\.path, action: \.path)
 //            ._printChanges()
     }
     
@@ -70,6 +74,7 @@ struct HomeFeature {
 
         case .scenePhaseBecomeActive:
             return ch(manully: false)
+
         case let .manullyUserEnableContentBlocker(isEnabled):
             if isEnabled {
                 state.alert = .updateSuccessAlert
@@ -99,7 +104,8 @@ struct HomeFeature {
             return ch(manully: true)
             
         case .tapAboutButton:
-            
+            state.path.removeAll()
+            state.path.append(.about(.init()))
             return .none
             
         case .tapDontTapMeButton:
@@ -130,6 +136,9 @@ struct HomeFeature {
             }
             
         case .alert:
+            return .none
+
+        case .path:
             return .none
         }
     }
