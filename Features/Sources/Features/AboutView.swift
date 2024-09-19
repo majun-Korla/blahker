@@ -59,12 +59,10 @@ struct AboutView: View {
     @MainActor
     @ViewBuilder
     private var shareCell: some View {
-        Button(action: {
-            store.send(.tapShareCell)
-
-        }, label: {
+        ShareLink(item: .appStore) {
             Text("share")
-        })
+
+        }
     }
     @MainActor
     @ViewBuilder

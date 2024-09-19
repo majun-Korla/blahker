@@ -68,6 +68,11 @@ struct HomeFeature {
         }
         
         switch action {
+        case .path(.element(id: _, action: .about(.tapBlockerListCell))):
+            state.path.append(.blockerList(.init()))
+            return .none 
+     
+            
         case .appDidFinishLaunching:
             return ch(manully: false)
 

@@ -15,7 +15,6 @@ struct AboutFeature {
         case tapBlockerListCell
         case tapReportCell
         case tapRateCell
-        case tapShareCell
         case tapAboutCell
         
     }
@@ -32,10 +31,13 @@ struct AboutFeature {
             return .none
             
         case .tapRateCell:
-            return .none
             
-        case .tapShareCell:
-            return .none
+            return .run {
+                _ in
+                await openURL(.appStore)
+            }
+            
+
             
         case .tapAboutCell:
             return .run {
