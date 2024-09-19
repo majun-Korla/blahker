@@ -8,10 +8,43 @@
 import ComposableArchitecture
 
 @Reducer
-struct AboutFeature: Equatable {
+struct AboutFeature {
     struct State: Equatable {}
 
-    enum Action: Equatable {}
+    enum Action: Equatable {
+        case tapBlockerListCell
+        case tapReportCell
+        case tapRateCell
+        case tapShareCell
+        case tapAboutCell
+        
+    }
 
-    func reduce(into state: inout State, action: Action) -> Effect<Action> {}
+    @Dependency(\.openURL) var openURL
+    
+    func reduce(into state: inout State, action: Action) -> Effect<Action> {
+        switch action {
+            
+        case .tapBlockerListCell:
+            return .none
+            
+        case .tapReportCell:
+            return .none
+            
+        case .tapRateCell:
+            return .none
+            
+        case .tapShareCell:
+            return .none
+            
+        case .tapAboutCell:
+            return .run {
+                _ in
+               
+                await openURL(.github)
+            }
+            
+        }
+        
+    }
 }

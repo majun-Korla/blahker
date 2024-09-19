@@ -8,7 +8,7 @@
 import ComposableArchitecture
 
 @Reducer
-struct BlockerListFeature: Equatable {
+struct BlockerListFeature {
     struct State: Equatable {}
 
     enum Action: Equatable {}

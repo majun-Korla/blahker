@@ -49,7 +49,6 @@ struct HomeFeature {
         Reduce(core)
             .ifLet(\.$alert, action: \.alert)
             .forEach(\.path, action: \.path)
-//            ._printChanges()
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
@@ -104,7 +103,6 @@ struct HomeFeature {
             return ch(manully: true)
             
         case .tapAboutButton:
-            state.path.removeAll()
             state.path.append(.about(.init()))
             return .none
             
@@ -127,8 +125,8 @@ struct HomeFeature {
             case .rateStar:
                 return .run {
                     _ in
-                    let url = URL(string: "https://apps.apple.com/cn/app/blahker-%E5%B7%B4%E6%8B%89%E5%89%8B/id1482371114?mt=12")!
-                    await openURL(url)
+                   
+                    await openURL(.appStore)
                 }
                 
             case .okToReload:

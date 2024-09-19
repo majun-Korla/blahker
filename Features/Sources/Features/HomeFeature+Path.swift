@@ -10,7 +10,7 @@ import Foundation
 
 extension HomeFeature {
     @Reducer
-    enum Path: Equatable {
+    enum Path {
         case about(AboutFeature)
         case blockerList(BlockerListFeature)
     }
