@@ -55,6 +55,7 @@ struct HomneView: View {
             }
             .preferredColorScheme(.dark)
             .alert(store: store.scope(state: \.$alert, action: \.alert))
+            .tint(.mint)
         }
     }
 
@@ -79,7 +80,6 @@ struct HomneView: View {
         } label: {
             Text("拜托别按我")
         }
-        .foregroundStyle(Color.white)
         .font(.title)
     }
 
@@ -91,7 +91,6 @@ struct HomneView: View {
         }, label: {
             Image(systemName: "arrow.clockwise")
         })
-        .buttonStyle(.plain)
     }
 
     @MainActor
@@ -103,7 +102,6 @@ struct HomneView: View {
         }, label: {
             Text("关于")
         })
-        .buttonStyle(.plain)
     }
 }
 

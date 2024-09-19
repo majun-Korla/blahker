@@ -21,6 +21,9 @@ struct AboutView: View {
                 aboutCell
             }
         }
+        .listStyle(.grouped)
+        .navigationTitle("About")
+        .navigationBarTitleDisplayMode(.inline)
     }
     @MainActor
     @ViewBuilder
@@ -82,7 +85,10 @@ struct AboutView: View {
 }
 
 #Preview {
-    AboutView(store: Store(initialState: AboutFeature.State(), reducer: {
-        AboutFeature()
-    }))
+    NavigationStack {
+        AboutView(store: Store(initialState: AboutFeature.State(), reducer: {
+            AboutFeature()
+        }))
+    }
+    .preferredColorScheme(.dark)
 }
