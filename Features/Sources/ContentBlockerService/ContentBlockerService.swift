@@ -8,9 +8,13 @@
 import Dependencies
 import Foundation
 import SafariServices
+import DependenciesMacros
 
+@DependencyClient
 public struct ContentBlockerService {
-    public var checkUserEnableContenBlocker: (String) async -> Bool
+    public var checkUserEnableContenBlocker: (String) async -> Bool = { _ in
+       unimplemented(_:"checkUserEnableContentBlocker", placeholder: false)
+    }
     public var reloadUserEnableContentBlocker: (String) async throws -> Void
 }
 
@@ -45,12 +49,7 @@ extension ContentBlockerService: DependencyKey {
 
 }
 
-extension ContentBlockerService: TestDependencyKey {
-    public static var testValue = ContentBlockerService(
-        checkUserEnableContenBlocker: unimplemented(_:"checkUserEnableContentBlocker", placeholder: false),
-        reloadUserEnableContentBlocker: unimplemented("reloadUserEnableContentBlocker",placeholder:())
-    )
-}
+
 
 public extension DependencyValues {
     var contentBlockerService: ContentBlockerService {
