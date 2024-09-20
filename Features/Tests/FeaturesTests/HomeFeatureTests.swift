@@ -19,10 +19,14 @@ final class HomeFeatureTests: XCTestCase {
         }
         
         await store.send(.appDidFinishLaunching)
+        {
+            $0.isCheckingBlockerlist = true
+        }
         await store.send(.scenePhaseBecomeActive)
         await store.receive(.userEnableContentBlocker(true)) {
             $0.isEnabledContentBlocker = true
             $0.isAppLaunch = false
+            $0.isCheckingBlockerlist = false
         }
     }
      
@@ -31,8 +35,11 @@ final class HomeFeatureTests: XCTestCase {
             $0.contentBlockerService.checkUserEnableContenBlocker = { _ in false }
         }
         
-        await store.send(.scenePhaseBecomeActive)
+        await store.send(.scenePhaseBecomeActive) {
+            $0.isCheckingBlockerlist = true
+        }
         await store.receive(.userEnableContentBlocker(false)) {
+            $0.isCheckingBlockerlist = false
             $0.alert = .pleaseEnableContentBlockerAlert
         }
     }
@@ -43,7 +50,12 @@ final class HomeFeatureTests: XCTestCase {
         }
         
         await store.send(.scenePhaseBecomeActive)
-        await store.receive(.userEnableContentBlocker(true))
+        {
+            $0.isCheckingBlockerlist = true
+        }
+        await store.receive(.userEnableContentBlocker(true)) {
+            $0.isCheckingBlockerlist = false
+        }
     }
     
     func testAppBecomeActivity_userHaventEnableContentBlocker_laterEnabled() async throws {
@@ -52,43 +64,67 @@ final class HomeFeatureTests: XCTestCase {
         }
         
         await store.send(.scenePhaseBecomeActive)
+        {
+            $0.isCheckingBlockerlist = true
+        }
         await store.receive(.userEnableContentBlocker(false)) {
             $0.alert = .pleaseEnableContentBlockerAlert
+            $0.isCheckingBlockerlist = false
         }
         
         store.dependencies.contentBlockerService.checkUserEnableContenBlocker = { _ in true }
         await store.send(.scenePhaseBecomeActive)
+        {
+            $0.isCheckingBlockerlist = true
+        }
         await store.receive(.userEnableContentBlocker(true)) {
             $0.isEnabledContentBlocker = true
             $0.alert = .updateSuccessAlert
+            $0.isCheckingBlockerlist = false
+
         }
     }
     
-    func testTapRefreshButton_userHaventEnableContentBlocker() async throws {
+    func testTapRefreshButton_userHaventEnableContentBlocker_laterEnable() async throws {
         let store = TestStore(initialState: HomeFeature.State(isAppLaunch: false), reducer: { HomeFeature() }) {
             $0.contentBlockerService.checkUserEnableContenBlocker = { _ in false }
         }
         
         await store.send(.tapRefreshButton)
-        await store.receive(.manullyUserEnableContentBlocker(false)) {
-            $0.alert = .pleaseEnableContentBlockerAlert
-        }
-        await store.send(.alert(.presented(.okToReload))) {
-            $0.alert = nil
+        {
+            $0.isCheckingBlockerlist = true
         }
         await store.receive(.manullyUserEnableContentBlocker(false)) {
             $0.alert = .pleaseEnableContentBlockerAlert
+            $0.isCheckingBlockerlist = false
+
         }
-        
+        //later enable
         store.dependencies.contentBlockerService.checkUserEnableContenBlocker = { _ in true }
-        
-        await store.send(.alert(.presented(.okToReload))) {
-            $0.alert = nil
+        await store.send(.scenePhaseBecomeActive)
+        {
+            $0.isCheckingBlockerlist = true
         }
-        await store.receive(.manullyUserEnableContentBlocker(true)) {
+        await store.receive(.userEnableContentBlocker(true)) {
             $0.isEnabledContentBlocker = true
             $0.alert = .updateSuccessAlert
+            $0.isCheckingBlockerlist = false
+
         }
+        
+        
+        await store.send(.alert(.presented(.okToReload))) {
+            $0.alert = nil
+            $0.isCheckingBlockerlist = true
+
+            
+        }
+        await store.receive(.manullyUserEnableContentBlocker(true)) {
+            $0.alert = .updateSuccessAlert
+            $0.isCheckingBlockerlist = false
+
+        }
+
     }
 
     func testTapRefreshButton_userAlreadyEnableContentBlocker() async throws {
@@ -100,8 +136,13 @@ final class HomeFeatureTests: XCTestCase {
         }
         
         await store.send(.tapRefreshButton)
+        {
+            $0.isCheckingBlockerlist = true
+        }
         await store.receive(.manullyUserEnableContentBlocker(true)) {
             $0.alert = .updateSuccessAlert
+            $0.isCheckingBlockerlist = false
+
         }
     }
 

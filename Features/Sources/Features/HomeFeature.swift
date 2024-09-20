@@ -15,6 +15,8 @@ struct HomeFeature {
         @Presents var alert: AlertState<Action.Alert>?
         var isAppLaunch = true
         var isEnabledContentBlocker = false
+        var isCheckingBlockerlist = false
+        
         
         var path = StackState<Path.State>()
     }
@@ -53,7 +55,8 @@ struct HomeFeature {
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
         func ch(manully: Bool) -> Effect<Action> {
-            .run {
+            state.isCheckingBlockerlist = true
+          return  .run {
                 send in
                 let extensionID = "com.elaborapp.Blahker.ContentBlocker"
             
@@ -86,6 +89,8 @@ struct HomeFeature {
                 state.alert = .pleaseEnableContentBlockerAlert
             }
             state.isEnabledContentBlocker = isEnabled
+            state.isCheckingBlockerlist = false
+
             return .none
             
         case let .userEnableContentBlocker(isEnabled):
@@ -99,6 +104,7 @@ struct HomeFeature {
             case (true, _, _):
                 break
             }
+            state.isCheckingBlockerlist = false
             state.isEnabledContentBlocker = isEnabled
             state.isAppLaunch = false
             return .none

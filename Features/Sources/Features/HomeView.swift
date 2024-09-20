@@ -86,11 +86,16 @@ struct HomneView: View {
     @MainActor
     @ViewBuilder
     private var refreshButton: some View {
-        Button(action: {
-            store.send(.tapRefreshButton)
-        }, label: {
-            Image(systemName: "arrow.clockwise")
-        })
+        WithViewStore(store, observe: \.isCheckingBlockerlist) { viewStore in
+            let isCheckingBlockerlist = viewStore.state
+            
+            Button(action: {
+                store.send(.tapRefreshButton)
+            }, label: {
+                Image(systemName: "arrow.clockwise")
+            })
+            .disabled(isCheckingBlockerlist)
+        }
     }
 
     @MainActor
