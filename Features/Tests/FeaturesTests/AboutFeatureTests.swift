@@ -4,7 +4,7 @@ import XCTest
 
 @MainActor
 final class AboutFeatureTests: XCTestCase {
-    func testTapReportCell_checkCanSendMail() async throws {
+    func testTapReportCell_checkCanSendMail_disabled_presentAlert() async throws {
         let store = TestStore(initialState: AboutFeature.State(), reducer: { AboutFeature() }) {
             $0.mailComposeClient.canSendMail = { false }
         }
@@ -18,7 +18,20 @@ final class AboutFeatureTests: XCTestCase {
             $0.alert = .pleaseMailOpen
             
         }
-        // dependency
+        
+        
+    }
+    
+    func testTapReportCell_checkCanSendMail_enabled() async throws {
+        let store = TestStore(initialState: AboutFeature.State(), reducer: { AboutFeature() }) {
+            $0.mailComposeClient.canSendMail = { true }
+        }
+
+      
+        
+        
+        await store.send(.tapReportCell)
+        //UIKit present MailCompose Controller
         
         
     }
