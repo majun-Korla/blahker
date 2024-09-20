@@ -24,6 +24,8 @@ struct AboutView: View {
         .listStyle(.grouped)
         .navigationTitle("About")
         .navigationBarTitleDisplayMode(.inline)
+        .alert(store: store.scope(state: \.$alert, action: \.alert))
+
     }
     @MainActor
     @ViewBuilder
@@ -54,7 +56,9 @@ struct AboutView: View {
     private var rateCell: some View {
         Button(action: {
             store.send(.tapRateCell)
-
+            
+            
+            
         }, label: {
             Text("rate")
         })
