@@ -12,10 +12,10 @@ import DependenciesMacros
 
 @DependencyClient
 public struct ContentBlockerService {
-    public var checkUserEnableContenBlocker: (String) async -> Bool = { _ in
+    public var checkUserEnableContenBlocker: (_ bundleID: String) async -> Bool = { _ in
        unimplemented(_:"checkUserEnableContentBlocker", placeholder: false)
     }
-    public var reloadUserEnableContentBlocker: (String) async throws -> Void
+    public var reloadUserEnableContentBlocker: (_ bundleID: String) async throws -> Void
 }
 
 extension ContentBlockerService: DependencyKey {

@@ -17,7 +17,6 @@ struct HomeFeature {
         var isEnabledContentBlocker = false
         var isCheckingBlockerlist = false
         
-        
         var path = StackState<Path.State>()
     }
 
@@ -56,11 +55,15 @@ struct HomeFeature {
     func core(into state: inout State, action: Action) -> Effect<Action> {
         func ch(manully: Bool) -> Effect<Action> {
             state.isCheckingBlockerlist = true
-          return  .run {
+            return .run {
                 send in
-                let extensionID = "com.elaborapp.Blahker.ContentBlocker"
+                let bundleID = "com.elaborapp.Blahker.ContentBlocker"
             
-                let isEnabled = await contentBlockerService.checkUserEnableContenBlocker(extensionID)
+                let isEnabled = await contentBlockerService.checkUserEnableContenBlocker(bundleID)
+                if isEnabled {
+                    try await contentBlockerService.reloadUserEnableContentBlocker(bundleID)
+                }
+              
                 await send(manully ? .manullyUserEnableContentBlocker(isEnabled) : .userEnableContentBlocker(isEnabled))
             }
             .cancellable(id: CancleID.checkUserBlockerEnableCancleID, cancelInFlight: true)
@@ -73,9 +76,8 @@ struct HomeFeature {
         switch action {
         case .path(.element(id: _, action: .about(.tapBlockerListCell))):
             state.path.append(.blockerList(.init()))
-            return .none 
+            return .none
      
-            
         case .appDidFinishLaunching:
             return ch(manully: false)
 

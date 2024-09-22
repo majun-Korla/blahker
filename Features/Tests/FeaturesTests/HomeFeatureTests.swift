@@ -4,7 +4,27 @@ import XCTest
 
 @MainActor
 final class HomeFeatureTests: XCTestCase {
+    func testAppBecomeActivity_userHaventEnableContentBlocker() async throws {
+        let store = TestStore(initialState: HomeFeature.State(isAppLaunch: false), reducer: { HomeFeature() }) {
+            $0.contentBlockerService.checkUserEnableContenBlocker = { _ in false }
+            $0.contentBlockerService.reloadUserEnableContentBlocker = {
+                _ in
+                XCTFail("User havent enable blocker, should not run here.")
+            }
+        }
+        
+        await store.send(.scenePhaseBecomeActive) {
+            $0.isCheckingBlockerlist = true
+        }
+        await store.receive(.userEnableContentBlocker(false)) {
+            $0.isCheckingBlockerlist = false
+            $0.alert = .pleaseEnableContentBlockerAlert
+        }
+    }
+    
     func testAppLaunch_userAlreadyEnableContentBlocker() async throws {
+//        let relaodContentBlockerExp = XCTestExpectation(description: "reloadContentBlocker")
+        var reloadContentBlocker = false
         let store = TestStore(initialState: HomeFeature.State(isAppLaunch: true, isEnabledContentBlocker: false), reducer: { HomeFeature() }) {
             $0.contentBlockerService.checkUserEnableContenBlocker = {
                 _ in
@@ -15,6 +35,11 @@ final class HomeFeatureTests: XCTestCase {
                     print("try error->\(error)")
                 }
                 return true
+            }
+            $0.contentBlockerService.reloadUserEnableContentBlocker = {
+                _ in
+                reloadContentBlocker = true
+//                relaodContentBlockerExp.fulfill()
             }
         }
         
@@ -28,25 +53,16 @@ final class HomeFeatureTests: XCTestCase {
             $0.isAppLaunch = false
             $0.isCheckingBlockerlist = false
         }
+        XCTAssert(reloadContentBlocker)
+//        await fulfillment(of: [relaodContentBlockerExp])
     }
      
-    func testAppBecomeActivity_userHaventEnableContentBlocker() async throws {
-        let store = TestStore(initialState: HomeFeature.State(isAppLaunch: false), reducer: { HomeFeature() }) {
-            $0.contentBlockerService.checkUserEnableContenBlocker = { _ in false }
-        }
-        
-        await store.send(.scenePhaseBecomeActive) {
-            $0.isCheckingBlockerlist = true
-        }
-        await store.receive(.userEnableContentBlocker(false)) {
-            $0.isCheckingBlockerlist = false
-            $0.alert = .pleaseEnableContentBlockerAlert
-        }
-    }
+    
     
     func testAppBecomeActivity_userAlreadyEnableContentBlocker() async throws {
         let store = TestStore(initialState: HomeFeature.State(isAppLaunch: false, isEnabledContentBlocker: true), reducer: { HomeFeature() }) {
             $0.contentBlockerService.checkUserEnableContenBlocker = { _ in true }
+            $0.contentBlockerService.reloadUserEnableContentBlocker = { _ in }
         }
         
         await store.send(.scenePhaseBecomeActive)
@@ -61,6 +77,7 @@ final class HomeFeatureTests: XCTestCase {
     func testAppBecomeActivity_userHaventEnableContentBlocker_laterEnabled() async throws {
         let store = TestStore(initialState: HomeFeature.State(isAppLaunch: false), reducer: { HomeFeature() }) {
             $0.contentBlockerService.checkUserEnableContenBlocker = { _ in false }
+            $0.contentBlockerService.reloadUserEnableContentBlocker = { _ in }
         }
         
         await store.send(.scenePhaseBecomeActive)
@@ -86,8 +103,13 @@ final class HomeFeatureTests: XCTestCase {
     }
     
     func testTapRefreshButton_userHaventEnableContentBlocker_laterEnable() async throws {
+        var isCheckingBlockerlist = 0
         let store = TestStore(initialState: HomeFeature.State(isAppLaunch: false), reducer: { HomeFeature() }) {
-            $0.contentBlockerService.checkUserEnableContenBlocker = { _ in false }
+            $0.contentBlockerService.checkUserEnableContenBlocker = { _ in
+                isCheckingBlockerlist += 1
+                return false }
+            $0.contentBlockerService.reloadUserEnableContentBlocker = { _ in }
+
         }
         
         await store.send(.tapRefreshButton)
@@ -100,7 +122,9 @@ final class HomeFeatureTests: XCTestCase {
 
         }
         //later enable
-        store.dependencies.contentBlockerService.checkUserEnableContenBlocker = { _ in true }
+        store.dependencies.contentBlockerService.checkUserEnableContenBlocker = { _ in
+            isCheckingBlockerlist += 1
+            return true }
         await store.send(.scenePhaseBecomeActive)
         {
             $0.isCheckingBlockerlist = true
@@ -109,7 +133,7 @@ final class HomeFeatureTests: XCTestCase {
             $0.isEnabledContentBlocker = true
             $0.alert = .updateSuccessAlert
             $0.isCheckingBlockerlist = false
-
+            
         }
         
         
@@ -124,6 +148,8 @@ final class HomeFeatureTests: XCTestCase {
             $0.isCheckingBlockerlist = false
 
         }
+        XCTAssertEqual(isCheckingBlockerlist, 3)
+
 
     }
 
@@ -133,6 +159,8 @@ final class HomeFeatureTests: XCTestCase {
         
         let store = TestStore(initialState: initialState, reducer: { HomeFeature() }) {
             $0.contentBlockerService.checkUserEnableContenBlocker = { _ in true }
+            $0.contentBlockerService.reloadUserEnableContentBlocker = { _ in }
+
         }
         
         await store.send(.tapRefreshButton)
