@@ -53,7 +53,7 @@ struct HomeFeature {
     }
     
     func core(into state: inout State, action: Action) -> Effect<Action> {
-        func ch(manully: Bool) -> Effect<Action> {
+        func checkUserEnableContentBlockerAndReload(manully: Bool) -> Effect<Action> {
             state.isCheckingBlockerlist = true
             return .run {
                 send in
@@ -79,10 +79,10 @@ struct HomeFeature {
             return .none
      
         case .appDidFinishLaunching:
-            return ch(manully: false)
+            return checkUserEnableContentBlockerAndReload(manully: false)
 
         case .scenePhaseBecomeActive:
-            return ch(manully: false)
+            return checkUserEnableContentBlockerAndReload(manully: false)
 
         case let .manullyUserEnableContentBlocker(isEnabled):
             if isEnabled {
@@ -113,7 +113,7 @@ struct HomeFeature {
             
         case .tapRefreshButton:
             
-            return ch(manully: true)
+            return checkUserEnableContentBlockerAndReload(manully: true)
             
         case .tapAboutButton:
             state.path.append(.about(.init()))
@@ -143,7 +143,7 @@ struct HomeFeature {
                 }
                 
             case .okToReload:
-                return ch(manully: true)
+                return checkUserEnableContentBlockerAndReload(manully: true)
             }
             
         case .alert:
