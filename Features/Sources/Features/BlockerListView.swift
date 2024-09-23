@@ -10,12 +10,49 @@ import SwiftUI
 struct BlockerListView: View {
     let store: StoreOf<BlockerListFeature>
     var body: some View {
-        Text("BlockerListView")
+        WithViewStore(store, observe: \.ruleItems) { viewStore in
+            let ruleItems = viewStore.state
+            List {
+                ForEach(ruleItems) { ruleItem in
+                    VStack(alignment: .leading) {
+                        Text(ruleItem.title)
+                            .font(.headline)
+                            .lineLimit(1)
+                        Text(ruleItem.description)
+                            .font(.subheadline)
+                            .lineLimit(3)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            .navigationTitle("blocker list ")
+            .navigationBarTitleDisplayMode(.inline)
+        }
     }
 }
 
 #Preview {
-    BlockerListView(store: Store(initialState: BlockerListFeature.State(), reducer: {
-        BlockerListFeature()
-    }))
+    BlockerListView(
+        store: .init(
+            initialState: BlockerListFeature.State(
+                ruleItems: [
+                    .init(title: "Ad.my", description: "block my advertisement."),
+                    .init(title: "Ad.my", description: "block my advertisement."),
+
+                    .init(
+                        title: "Ad.my",
+                        description: """
+                        block my advertisement.
+                        Ad.my0
+                        Ad.my1
+                        Ad.my2
+                        """
+                    )
+                ]
+            ),
+            reducer: { BlockerListFeature()
+            }
+        )
+    )
+    .preferredColorScheme(.dark)
 }
