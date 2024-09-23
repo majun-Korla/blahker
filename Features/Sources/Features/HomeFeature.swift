@@ -19,7 +19,6 @@ struct HomeFeature {
         
         var path = StackState<Path.State>()
     }
-
     enum Action: Equatable {
         case path(StackActionOf<Path>)
         case alert(PresentationAction<Alert>)

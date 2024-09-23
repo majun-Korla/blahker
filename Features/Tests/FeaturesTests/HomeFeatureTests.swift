@@ -16,7 +16,7 @@ final class HomeFeatureTests: XCTestCase {
         await store.send(.scenePhaseBecomeActive) {
             $0.isCheckingBlockerlist = true
         }
-        await store.receive(.userEnableContentBlocker(false)) {
+        await store.receive(\.userEnableContentBlocker, false) {
             $0.isCheckingBlockerlist = false
             $0.alert = .pleaseEnableContentBlockerAlert
         }
@@ -48,7 +48,7 @@ final class HomeFeatureTests: XCTestCase {
             $0.isCheckingBlockerlist = true
         }
         await store.send(.scenePhaseBecomeActive)
-        await store.receive(.userEnableContentBlocker(true)) {
+        await store.receive(\.userEnableContentBlocker, true) {
             $0.isEnabledContentBlocker = true
             $0.isAppLaunch = false
             $0.isCheckingBlockerlist = false
@@ -84,7 +84,7 @@ final class HomeFeatureTests: XCTestCase {
         {
             $0.isCheckingBlockerlist = true
         }
-        await store.receive(.userEnableContentBlocker(false)) {
+        await store.receive(\.userEnableContentBlocker, false) {
             $0.alert = .pleaseEnableContentBlockerAlert
             $0.isCheckingBlockerlist = false
         }
@@ -116,7 +116,7 @@ final class HomeFeatureTests: XCTestCase {
         {
             $0.isCheckingBlockerlist = true
         }
-        await store.receive(.manullyUserEnableContentBlocker(false)) {
+        await store.receive(\.manullyUserEnableContentBlocker, false) {
             $0.alert = .pleaseEnableContentBlockerAlert
             $0.isCheckingBlockerlist = false
 
