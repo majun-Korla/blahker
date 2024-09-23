@@ -13,14 +13,12 @@ struct HomneView: View {
     let store: StoreOf<HomeFeature>
 
     var body: some View {
-        WithViewStore(store, observe: { $0.isEnabledContentBlocker }) {
-            viewStore in
-            let isEnable = viewStore.state
+        WithPerceptionTracking {
             NavigationStackStore(self.store.scope(state: \.path, action: \.path)) {
                 VStack {
                     descriptionView
                     Spacer()
-                    Text("Blahker is \(isEnable ? "Enabled" : "Disable")")
+                    Text("Blahker is \(store.isEnabledContentBlocker ? "1Enabled" : "2Disable")")
                     dontTapMeButton
                 }
                 .navigationTitle("Blahker")
@@ -86,15 +84,14 @@ struct HomneView: View {
     @MainActor
     @ViewBuilder
     private var refreshButton: some View {
-        WithViewStore(store, observe: \.isCheckingBlockerlist) { viewStore in
-            let isCheckingBlockerlist = viewStore.state
+        WithPerceptionTracking {
             
             Button(action: {
                 store.send(.tapRefreshButton)
             }, label: {
                 Image(systemName: "arrow.clockwise")
             })
-            .disabled(isCheckingBlockerlist)
+            .disabled(store.isCheckingBlockerlist)
         }
     }
 
