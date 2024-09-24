@@ -31,7 +31,7 @@ struct HomeFeature {
         case tapRefreshButton
         case tapAboutButton
         case tapDontTapMeButton
-        
+        @CasePathable
         enum Alert {
             case smallDonation
             case mediumDonation

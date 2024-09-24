@@ -137,7 +137,9 @@ final class HomeFeatureTests: XCTestCase {
         }
         
         
-        await store.send(.alert(.presented(.okToReload))) {
+//        await store.send(.alert(.presented(.okToReload))) {
+        await store.send(\.alert.presented.okToReload) {
+
             $0.alert = nil
             $0.isCheckingBlockerlist = true
 
@@ -190,7 +192,7 @@ final class HomeFeatureTests: XCTestCase {
             $0.alert = .donateAlert
         }
         
-        await store.send(.alert(.presented(.rateStar))) {
+        await store.send(\.alert.presented.rateStar) {
             $0.alert = nil
         }
     }
