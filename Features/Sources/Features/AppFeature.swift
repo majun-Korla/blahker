@@ -19,16 +19,11 @@ class NewAppDelegate: NSObject, UIApplicationDelegate {
         AppFeature()
     })
 
-
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         store.send(.home(.appDidFinishLaunching))
 
         return true
     }
-    
-
-
 }
 
 @Reducer
@@ -64,6 +59,8 @@ struct AppView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some View {
-        HomneView(store: store.scope(state: \.home, action: \.home))
+        WithPerceptionTracking {
+            HomneView(store: store.scope(state: \.home, action: \.home))
+        }
     }
 }

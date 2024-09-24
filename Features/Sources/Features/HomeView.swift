@@ -10,11 +10,12 @@ import SwiftUI
 
 struct HomneView: View {
     @Environment(\.scenePhase) private var scenePhase
-    let store: StoreOf<HomeFeature>
+    @Perception.Bindable var store: StoreOf<HomeFeature>
 
     var body: some View {
         WithPerceptionTracking {
-            NavigationStackStore(self.store.scope(state: \.path, action: \.path)) {
+            NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
+
                 VStack {
                     descriptionView
                     Spacer()
@@ -52,8 +53,8 @@ struct HomneView: View {
                 }
             }
             .preferredColorScheme(.dark)
-            .alert(store: store.scope(state: \.$alert, action: \.alert))
             .tint(.mint)
+            .alert($store.scope(state: \.alert, action: \.alert))
         }
     }
 

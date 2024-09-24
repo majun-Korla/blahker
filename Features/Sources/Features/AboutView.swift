@@ -8,23 +8,25 @@ import ComposableArchitecture
 import SwiftUI
 
 struct AboutView: View {
-    let store: StoreOf<AboutFeature>
+    @Perception.Bindable var  store: StoreOf<AboutFeature>
     var body: some View {
-        List {
-            Section {
-                blockerListCell
-                reportCell
+        WithPerceptionTracking {
+            List {
+                Section {
+                    blockerListCell
+                    reportCell
+                }
+                Section {
+                    rateCell
+                    shareCell
+                    aboutCell
+                }
             }
-            Section {
-                rateCell
-                shareCell
-                aboutCell
-            }
+            .listStyle(.grouped)
+            .navigationTitle("About")
+            .navigationBarTitleDisplayMode(.inline)
+            .alert($store.scope(state: \.alert, action: \.alert))
         }
-        .listStyle(.grouped)
-        .navigationTitle("About")
-        .navigationBarTitleDisplayMode(.inline)
-        .alert(store: store.scope(state: \.$alert, action: \.alert))
 
     }
     @MainActor
