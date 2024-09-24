@@ -9,13 +9,10 @@ import ComposableArchitecture
 import Foundation
 
 extension HomeFeature {
-    @Reducer
+    @Reducer(state: .equatable, action: .equatable)
     enum Path {
         case about(AboutFeature)
         case blockerList(BlockerListFeature)
     }
 }
 
-extension HomeFeature.Path.State: Equatable {}
-
-extension HomeFeature.Path.Action: Equatable {}
