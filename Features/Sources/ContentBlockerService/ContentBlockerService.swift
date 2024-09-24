@@ -22,27 +22,28 @@ extension ContentBlockerService: DependencyKey {
 
     public static var liveValue = ContentBlockerService { bundleID in
         await withCheckedContinuation { continuation in
-            SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: bundleID, completionHandler: {
-                state, error in
-                continuation.resume(returning: state?.isEnabled ?? false)
-                if let error {
-                    // log
-                }
-            })
+//            SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: bundleID, completionHandler: {
+//                state, error in
+//                continuation.resume(returning: state?.isEnabled ?? false)
+//                if let error {
+//                    // log
+//                }
+//            })
+            continuation.resume(returning: true)
         }
     } reloadUserEnableContentBlocker: { bundleID in
         try await withCheckedThrowingContinuation { continuation in
-            SFContentBlockerManager.reloadContentBlocker(withIdentifier: bundleID, completionHandler: {
-                 error in
-                
-                if let error {
-                    continuation.resume(throwing: error)
-                }
-                else {
-                    continuation.resume()
-                }
-            })
-            
+//            SFContentBlockerManager.reloadContentBlocker(withIdentifier: bundleID, completionHandler: {
+//                 error in
+//                
+//                if let error {
+//                    continuation.resume(throwing: error)
+//                }
+//                else {
+//                    continuation.resume()
+//                }
+//            })
+            continuation.resume()
         }
         
     }
