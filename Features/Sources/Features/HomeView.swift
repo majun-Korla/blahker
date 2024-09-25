@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct HomneView: View {
+struct HomeView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Perception.Bindable var store: StoreOf<HomeFeature>
 
@@ -109,7 +109,7 @@ struct HomneView: View {
 }
 
 #Preview {
-    HomneView(store: Store(initialState: HomeFeature.State(), reducer: {
+    HomeView(store: Store(initialState: HomeFeature.State(), reducer: {
         HomeFeature()
     })
     )

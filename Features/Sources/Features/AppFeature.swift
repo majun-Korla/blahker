@@ -60,7 +60,7 @@ struct AppView: View {
 
     var body: some View {
         WithPerceptionTracking {
-            HomneView(store: store.scope(state: \.home, action: \.home))
+            HomeView(store: store.scope(state: \.home, action: \.home))
         }
     }
 }
