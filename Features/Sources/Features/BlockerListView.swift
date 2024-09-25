@@ -25,6 +25,9 @@ struct BlockerListView: View {
                     }
                 }
             }
+            .refreshable {
+                store.send(.reload)
+            }
             .navigationTitle("blocker list ")
             .navigationBarTitleDisplayMode(.inline)
             .task {

@@ -21,21 +21,29 @@ struct BlockerListFeature {
         // downloadlist , ruletItmes = rules.map()
         case task
         case receiveRuleItems([RuleItem])
+        case reload
     }
 
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
-        switch action {
-        case .task:
-
-            return .run { send in
-
+        let  fetchBlockerList: Effect<Action> =
+            .run { send in
                 @Dependency(\.contentBlockerService) var contentBlockerService
                 let ruleItems = try await contentBlockerService.fetchBlockerList()
-                await send(.receiveRuleItems(ruleItems))
+                 await send(.receiveRuleItems(ruleItems))
             }
-//            catch: { error, send in
-//                XCTFail(error.localizedDescription)
-//            }
+            catch: { error, _ in
+                print("--------")
+                XCTFail(error.localizedDescription)
+            }
+        
+
+        switch action {
+        case .reload:
+            return fetchBlockerList
+
+        case .task:
+            return fetchBlockerList
+
         case let .receiveRuleItems(ruleItems):
             state.ruleItems = ruleItems
             return .none

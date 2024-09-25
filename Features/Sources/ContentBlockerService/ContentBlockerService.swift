@@ -27,32 +27,31 @@ public struct ContentBlockerService {
 extension ContentBlockerService: DependencyKey {
     public static var liveValue = ContentBlockerService(
         checkUserEnableContenBlocker: {
-            _ in
+            bundleID in
             await withCheckedContinuation { continuation in
-                //            SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: bundleID, completionHandler: {
-                //                state, error in
-                //                continuation.resume(returning: state?.isEnabled ?? false)
-                //                if let error {
-                //                    // log
-                //                }
-                //            })
-                continuation.resume(returning: true)
+                SFContentBlockerManager.getStateOfContentBlocker(withIdentifier: bundleID, completionHandler: {
+                    state, error in
+                    continuation.resume(returning: state?.isEnabled ?? false)
+                    if let error {
+                        // log
+                    }
+                })
+//                continuation.resume(returning: true)
             }
         },
         reloadUserEnableContentBlocker: {
-            _ in
+            bundleID in
             try await withCheckedThrowingContinuation { continuation in
-                //            SFContentBlockerManager.reloadContentBlocker(withIdentifier: bundleID, completionHandler: {
-                //                 error in
-                //
-                //                if let error {
-                //                    continuation.resume(throwing: error)
-                //                }
-                //                else {
-                //                    continuation.resume()
-                //                }
-                //            })
-                continuation.resume()
+                SFContentBlockerManager.reloadContentBlocker(withIdentifier: bundleID, completionHandler: {
+                    error in
+
+                    if let error {
+                        continuation.resume(throwing: error)
+                    } else {
+                        continuation.resume()
+                    }
+                })
+//                continuation.resume()
             }
         },
         fetchBlockerList: {
@@ -62,7 +61,7 @@ extension ContentBlockerService: DependencyKey {
             // urlsession fetch url
             // decode to Rule
             // convert to RuleItem
-            
+
             let urlSession = URLSession.shared
             guard let url = URL(string: "https://raw.githubusercontent.com/ethanhuang13/blahker/master/Blahker.safariextension/blockerList.json") else {
                 print("Invalid URL")
@@ -94,7 +93,7 @@ extension ContentBlockerService: DependencyKey {
                 let ruleItem = RuleItem(domain: domain, selectors: selectors)
                 ruleItems.append(ruleItem)
             }
-            
+
             return ruleItems
                 .sorted(using: [KeyPathComparator(\.domain)])
         }
