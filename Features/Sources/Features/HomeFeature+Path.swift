@@ -15,4 +15,3 @@ extension HomeFeature {
         case blockerList(BlockerListFeature)
     }
 }
-

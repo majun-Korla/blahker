@@ -382,12 +382,10 @@
 				TargetAttributes = {
 					6C6308A323472C7700646E6B = {
 						CreatedOnToolsVersion = 11.0;
-						DevelopmentTeam = SE9N6X5V7C;
 						ProvisioningStyle = Automatic;
 					};
 					6C8359651DE312FD0033A1BC = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = SE9N6X5V7C;
 						LastSwiftMigration = 1100;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
@@ -398,19 +396,16 @@
 					};
 					6C8359791DE312FE0033A1BC = {
 						CreatedOnToolsVersion = 8.1;
-						DevelopmentTeam = SE9N6X5V7C;
 						LastSwiftMigration = 1100;
 						ProvisioningStyle = Automatic;
 						TestTargetID = 6C8359651DE312FD0033A1BC;
 					};
 					6C88777C23445ED700A02EBC = {
 						CreatedOnToolsVersion = 11.0;
-						DevelopmentTeam = SE9N6X5V7C;
 						ProvisioningStyle = Automatic;
 					};
 					6CC9F0C21DE31340004142AC = {
 						CreatedOnToolsVersion = 8.2;
-						DevelopmentTeam = SE9N6X5V7C;
 						LastSwiftMigration = 1100;
 						ProvisioningStyle = Automatic;
 					};
@@ -590,7 +585,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BlahkerMac/Info.plist;
@@ -621,7 +616,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = BlahkerMac/Info.plist;
@@ -766,7 +761,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				INFOPLIST_FILE = Blahker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -816,7 +811,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				INFOPLIST_FILE = BlahkerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -835,7 +830,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				INFOPLIST_FILE = BlahkerTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -859,7 +854,7 @@
 				CODE_SIGN_ENTITLEMENTS = ContentBlockerMac/ContentBlockerMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ContentBlockerMac/Info.plist;
@@ -890,7 +885,7 @@
 				CODE_SIGN_ENTITLEMENTS = ContentBlockerMac/ContentBlockerMac.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 13;
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				INFOPLIST_FILE = ContentBlockerMac/Info.plist;
@@ -916,7 +911,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 12;
-				DEVELOPMENT_TEAM = SE9N6X5V7C;
+				DEVELOPMENT_TEAM = LC56X4ANBX;
 				INFOPLIST_FILE = ContentBlocker/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (

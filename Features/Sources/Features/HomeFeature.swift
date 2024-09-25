@@ -19,6 +19,7 @@ struct HomeFeature {
         
         var path = StackState<Path.State>()
     }
+
     enum Action: Equatable {
         case path(StackActionOf<Path>)
         case alert(PresentationAction<Alert>)
@@ -126,6 +127,7 @@ struct HomeFeature {
         case let .alert(.presented(action)):
             switch action {
             case .smallDonation:
+                
                 return .none
                 
             case .mediumDonation:

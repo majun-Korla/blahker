@@ -5,6 +5,7 @@
 //  Created by Mason Ma on 2024/9/17.
 //
 import ComposableArchitecture
+import Models
 import SwiftUI
 
 struct BlockerListView: View {
@@ -14,10 +15,10 @@ struct BlockerListView: View {
             List {
                 ForEach(store.ruleItems) { ruleItem in
                     VStack(alignment: .leading) {
-                        Text(ruleItem.title)
+                        Text(ruleItem.domain)
                             .font(.headline)
                             .lineLimit(1)
-                        Text(ruleItem.description)
+                        Text(ruleItem.selectors.joined(separator: ", "))
                             .font(.subheadline)
                             .lineLimit(3)
                             .foregroundStyle(.secondary)
@@ -26,6 +27,9 @@ struct BlockerListView: View {
             }
             .navigationTitle("blocker list ")
             .navigationBarTitleDisplayMode(.inline)
+            .task {
+                await store.send(.task).finish()
+            }
         }
     }
 }
@@ -35,17 +39,15 @@ struct BlockerListView: View {
         store: .init(
             initialState: BlockerListFeature.State(
                 ruleItems: [
-                    .init(title: "Ad.my", description: "block my advertisement."),
-                    .init(title: "Ad.my", description: "block my advertisement."),
-
+                    .init(domain: "Ad.my", selectors: ["block my advertisement."]),
                     .init(
-                        title: "Ad.my",
-                        description: """
+                        domain: "ad",
+                        selectors: ["""
                         block my advertisement.
                         Ad.my0
                         Ad.my1
                         Ad.my2
-                        """
+                        """]
                     )
                 ]
             ),

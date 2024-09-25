@@ -20,7 +20,7 @@ let package = Package(
             targets: ["Models"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.14.0"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.15.0"),
         .package(url: "https://github.com/pointfreeco/swift-dependencies.git", from: "1.3.9"),
     ],
     targets: [
@@ -33,7 +33,7 @@ let package = Package(
                 dependencies: []),
         .target(
             name: "ContentBlockerService",
-            dependencies: [.dependencies, .dependenciesMacro]),
+            dependencies: [.dependencies, .dependenciesMacro, .models]),
         .testTarget(
             name: "FeaturesTests",
             dependencies: ["Features", .tca]),
